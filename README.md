@@ -7,7 +7,7 @@ SNKeyboardManager is a extend of UITextField/UITextView, you can control the key
 
 
 ## Usage
-###tap or pan blank to turn of the keyboard：
+#####Tap or pan any blank area to turn off the keyboard：
 
 ```objc
     _textField.sn_keyboardManagerEnabled = YES;
@@ -15,7 +15,7 @@ SNKeyboardManager is a extend of UITextField/UITextView, you can control the key
 ```
 ![image](https://github.com/jiaopen/SNKeyBoardManager/blob/master/screenshot1.gif)
 
-###Adjust the position of view when keyboard is showeing and dismissing：
+#####Adjust the position of view when keyboard is showeing and dismissing：
 
 ```objc
     _textField.sn_autoAdjustFrameEnabled = YES;
