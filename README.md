@@ -15,7 +15,7 @@ SNKeyboardManager is a extend of UITextField/UITextView, you can control the key
 ```
 ![image](https://github.com/jiaopen/SNKeyBoardManager/blob/master/screenshot1.gif)
 
-#####Adjust the position of view when keyboard is showeing and dismissing：
+#####Adjust the position of view when keyboard is showing or dismissing：
 
 ```objc
     _textField.sn_autoAdjustFrameEnabled = YES;
