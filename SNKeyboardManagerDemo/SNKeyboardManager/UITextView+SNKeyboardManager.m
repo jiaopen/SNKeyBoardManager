@@ -20,18 +20,31 @@
 @implementation UITextView (SNKeyboardManager)
 
 + (void)load {
-    SEL selectors[] = {
-        NSSelectorFromString(@"dealloc"),
-    };
-    
-    for (NSUInteger index = 0; index < sizeof(selectors) / sizeof(SEL); ++index)
-    {
-        SEL originalSelector = selectors[index];
-        SEL swizzledSelector = NSSelectorFromString([@"sn_" stringByAppendingString:NSStringFromSelector(originalSelector)]);
-        Method originalMethod = class_getInstanceMethod(self, originalSelector);
-        Method swizzledMethod = class_getInstanceMethod(self, swizzledSelector);
-        method_exchangeImplementations(originalMethod, swizzledMethod);
-    }
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        
+        SEL selectors[] = {
+            NSSelectorFromString(@"dealloc"),
+        };
+        
+        for (NSUInteger index = 0; index < sizeof(selectors) / sizeof(SEL); ++index) {
+            SEL originalSelector = selectors[index];
+            SEL swizzledSelector = NSSelectorFromString([@"sn_" stringByAppendingString:NSStringFromSelector(originalSelector)]);
+            
+            Method originalMethod = class_getInstanceMethod(self, originalSelector);
+            Method swizzledMethod = class_getInstanceMethod(self, swizzledSelector);
+            
+            BOOL addedSuccess = class_addMethod(self, originalSelector, method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod));
+            if (addedSuccess)
+            {
+                class_replaceMethod(self, swizzledSelector, method_getImplementation(originalMethod), method_getTypeEncoding(originalMethod));
+            }
+            else
+            {
+                method_exchangeImplementations(originalMethod, swizzledMethod);
+            }
+        }
+    });
 }
 
 -(void)sn_dealloc
