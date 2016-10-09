@@ -15,8 +15,8 @@
 
 @interface UITextField ()<UIGestureRecognizerDelegate>
 
-@property (nonatomic, strong) UITapGestureRecognizer *sn_tapGestureRecognizer;
-@property (nonatomic, strong) UIPanGestureRecognizer *sn_panGestureRecognizer;
+@property (nonatomic, strong) UITapGestureRecognizer *tapGestureRecognizer;
+@property (nonatomic, strong) UIPanGestureRecognizer *panGestureRecognizer;
 @property (nonatomic, assign, getter=isRectAdjusted) BOOL rectAdjusted;
 @property (nonatomic, assign) BOOL haveOtherResponder;
 
@@ -88,17 +88,17 @@
         return;
     }
     self.haveOtherResponder = NO;
-    if (!self.sn_tapGestureRecognizer)
+    if (!self.tapGestureRecognizer)
     {
-        self.sn_tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
-        self.sn_tapGestureRecognizer.delegate = self;
-        [self.sn_rootView addGestureRecognizer:self.sn_tapGestureRecognizer];
+        self.tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
+        self.tapGestureRecognizer.delegate = self;
+        [self.sn_rootView addGestureRecognizer:self.tapGestureRecognizer];
     }
-    if (!self.sn_panGestureRecognizer)
+    if (!self.panGestureRecognizer)
     {
-        self.sn_panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pan:)];
-        self.sn_panGestureRecognizer.delegate = self;
-        [self.sn_rootView addGestureRecognizer:self.sn_panGestureRecognizer];
+        self.panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pan:)];
+        self.panGestureRecognizer.delegate = self;
+        [self.sn_rootView addGestureRecognizer:self.panGestureRecognizer];
     }
     
     if (self.isAutoAdjustFrameEnabled)
@@ -129,7 +129,7 @@
 
 - (void)handleWillHideKeyboard:(NSNotification *)notification
 {
-    if (!self.sn_tapGestureRecognizer && !CGRectEqualToRect(self.sn_rootView.frame, self.window.frame)) {
+    if (!self.tapGestureRecognizer && !CGRectEqualToRect(self.sn_rootView.frame, self.window.frame)) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.01 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [UIView animateWithDuration:0.2
                                   delay:0.0f
@@ -160,14 +160,14 @@
 {
     [self resignFirstResponder];
     [self.sn_rootView removeGestureRecognizer:gestureRecognizer];
-    self.sn_tapGestureRecognizer = nil;
+    self.tapGestureRecognizer = nil;
 }
 
 - (void)pan:(UIPanGestureRecognizer *)gestureRecognizer
 {
     [self resignFirstResponder];
     [self.sn_rootView removeGestureRecognizer:gestureRecognizer];
-    self.sn_panGestureRecognizer = nil;
+    self.panGestureRecognizer = nil;
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
@@ -214,7 +214,7 @@
 
 -(void)setSn_autoAdjustFrameEnabled:(BOOL)sn_autoAdjustFrameEnabled
 {
-    objc_setAssociatedObject(self, @selector(isAutoAdjustFrameEnabled), @(sn_autoAdjustFrameEnabled), OBJC_ASSOCIATION_ASSIGN);
+    objc_setAssociatedObject(self, @selector(isAutoAdjustFrameEnabled), @(sn_autoAdjustFrameEnabled), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 -(BOOL)isAutoAdjustFrameEnabled
@@ -224,7 +224,7 @@
 
 - (void)setSn_keyboardDistance:(CGFloat)sn_keyboardDistance
 {
-    objc_setAssociatedObject(self, @selector(sn_keyboardDistance), @(sn_keyboardDistance), OBJC_ASSOCIATION_ASSIGN);
+    objc_setAssociatedObject(self, @selector(sn_keyboardDistance), @(sn_keyboardDistance), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (CGFloat)sn_keyboardDistance
@@ -242,7 +242,7 @@
 
 - (void)setRectAdjusted:(BOOL)rectAdjusted
 {
-    objc_setAssociatedObject(self, @selector(isRectAdjusted), @(rectAdjusted), OBJC_ASSOCIATION_ASSIGN);
+    objc_setAssociatedObject(self, @selector(isRectAdjusted), @(rectAdjusted), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (BOOL)isRectAdjusted
@@ -252,7 +252,7 @@
 
 - (void)setHaveOtherResponder:(BOOL)haveOtherResponder
 {
-    objc_setAssociatedObject(self, @selector(haveOtherResponder), @(haveOtherResponder), OBJC_ASSOCIATION_ASSIGN);
+    objc_setAssociatedObject(self, @selector(haveOtherResponder), @(haveOtherResponder), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (BOOL)haveOtherResponder
@@ -260,37 +260,38 @@
     return [objc_getAssociatedObject(self, _cmd) boolValue];
 }
 
--(void)setSn_panGestureRecognizer:(UIPanGestureRecognizer *)sn_panGestureRecognizer
+
+- (void)setPanGestureRecognizer:(UIPanGestureRecognizer *)panGestureRecognizer
 {
-    objc_setAssociatedObject(self, @selector(sn_panGestureRecognizer), sn_panGestureRecognizer, OBJC_ASSOCIATION_RETAIN);
+    objc_setAssociatedObject(self, @selector(panGestureRecognizer), panGestureRecognizer, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
--(UIPanGestureRecognizer *)sn_panGestureRecognizer
+- (UIPanGestureRecognizer *)panGestureRecognizer
 {
     return objc_getAssociatedObject(self, _cmd);
 }
 
--(void)setSn_tapGestureRecognizer:(UITapGestureRecognizer *)sn_tapGestureRecognizer
+- (void)setTapGestureRecognizer:(UITapGestureRecognizer *)tapGestureRecognizer
 {
-    objc_setAssociatedObject(self, @selector(sn_tapGestureRecognizer), sn_tapGestureRecognizer, OBJC_ASSOCIATION_RETAIN);
+    objc_setAssociatedObject(self, @selector(tapGestureRecognizer), tapGestureRecognizer, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
--(UITapGestureRecognizer *)sn_tapGestureRecognizer
+- (UITapGestureRecognizer *)tapGestureRecognizer
 {
     return objc_getAssociatedObject(self, _cmd);
 }
 
-- (void)removeGestureRecognizer 
+- (void)removeGestureRecognizer
 {
-    if (self.sn_tapGestureRecognizer)
+    if (self.tapGestureRecognizer)
     {
-        [self.sn_rootView removeGestureRecognizer:self.sn_tapGestureRecognizer];
-        self.sn_tapGestureRecognizer = nil;
+        [self.sn_rootView removeGestureRecognizer:self.tapGestureRecognizer];
+        self.tapGestureRecognizer = nil;
     }
-    if (self.sn_panGestureRecognizer)
+    if (self.panGestureRecognizer)
     {
-        [self.sn_rootView removeGestureRecognizer:self.sn_panGestureRecognizer];
-        self.sn_panGestureRecognizer = nil;
+        [self.sn_rootView removeGestureRecognizer:self.panGestureRecognizer];
+        self.panGestureRecognizer = nil;
     }
 }
 

@@ -16,7 +16,7 @@
     UIView *superView = self.superview;
     if ([NSStringFromClass([superView class]) isEqualToString:@"UIViewControllerWrapperView"])
     {
-          return self;
+        return self;
     }
     else
     {
@@ -41,17 +41,17 @@
 {
     switch (curve) {
         case UIViewAnimationCurveEaseInOut:
-            return UIViewAnimationOptionCurveEaseInOut;
-            break;
+        return UIViewAnimationOptionCurveEaseInOut;
+        break;
         case UIViewAnimationCurveEaseIn:
-            return UIViewAnimationOptionCurveEaseIn;
-            break;
+        return UIViewAnimationOptionCurveEaseIn;
+        break;
         case UIViewAnimationCurveEaseOut:
-            return UIViewAnimationOptionCurveEaseOut;
-            break;
+        return UIViewAnimationOptionCurveEaseOut;
+        break;
         case UIViewAnimationCurveLinear:
-            return UIViewAnimationOptionCurveLinear;
-            break;
+        return UIViewAnimationOptionCurveLinear;
+        break;
     }
     
     return kNilOptions;
