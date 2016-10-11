@@ -117,6 +117,7 @@
     if (self.isAutoAdjustFrameEnabled)
     {
         CGRect keyboardRect = [[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+        keyboardRect = [self.sn_rootView convertRect:keyboardRect fromView:nil];
         CGRect rectInWindow = [self convertRect:self.bounds toView:self.window];
         rectInWindow = CGRectMake(0, rectInWindow.origin.y, self.window.frame.size.width, rectInWindow.size.height);
         

@@ -12,8 +12,8 @@
 
 @interface UITextView ()<UIGestureRecognizerDelegate>
 
-@property (nonatomic, strong) UITapGestureRecognizer *tapGestureRecognizer;
-@property (nonatomic, strong) UIPanGestureRecognizer *panGestureRecognizer;
+@property (nonatomic, strong) UITapGestureRecognizer *sn_tapGestureRecognizer;
+@property (nonatomic, strong) UIPanGestureRecognizer *sn_panGestureRecognizer;
 
 @end
 
@@ -60,17 +60,17 @@
     {
         [self removeGestureRecognizer];
     }
-    if (!self.tapGestureRecognizer)
+    if (!self.sn_tapGestureRecognizer)
     {
-        self.tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
-        self.tapGestureRecognizer.delegate = self;
-        [self.sn_rootView addGestureRecognizer:self.tapGestureRecognizer];
+        self.sn_tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
+        self.sn_tapGestureRecognizer.delegate = self;
+        [self.sn_rootView addGestureRecognizer:self.sn_tapGestureRecognizer];
     }
-    if (!self.panGestureRecognizer)
+    if (!self.sn_panGestureRecognizer)
     {
-        self.panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pan:)];
-        self.panGestureRecognizer.delegate = self;
-        [self.sn_rootView addGestureRecognizer:self.panGestureRecognizer];
+        self.sn_panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pan:)];
+        self.sn_panGestureRecognizer.delegate = self;
+        [self.sn_rootView addGestureRecognizer:self.sn_panGestureRecognizer];
     }
 }
 
@@ -85,14 +85,14 @@
 {
     [self resignFirstResponder];
     [self.sn_rootView removeGestureRecognizer:gestureRecognizer];
-    self.tapGestureRecognizer = nil;
+    self.sn_tapGestureRecognizer = nil;
 }
 
 - (void)pan:(UIPanGestureRecognizer *)gestureRecognizer
 {
     [self resignFirstResponder];
     [self.sn_rootView removeGestureRecognizer:gestureRecognizer];
-    self.panGestureRecognizer = nil;
+    self.sn_panGestureRecognizer = nil;
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
@@ -131,37 +131,37 @@
     return [objc_getAssociatedObject(self, _cmd) boolValue];
 }
 
--(void)setPanGestureRecognizer:(UIPanGestureRecognizer *)panGestureRecognizer
+-(void)setSn_panGestureRecognizer:(UIPanGestureRecognizer *)sn_panGestureRecognizer
 {
-    objc_setAssociatedObject(self, @selector(panGestureRecognizer), panGestureRecognizer, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, @selector(sn_panGestureRecognizer), sn_panGestureRecognizer, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
--(UIPanGestureRecognizer *)panGestureRecognizer
+-(UIPanGestureRecognizer *)sn_panGestureRecognizer
 {
     return objc_getAssociatedObject(self, _cmd);
 }
 
--(void)setTapGestureRecognizer:(UITapGestureRecognizer *)tapGestureRecognizer
+-(void)setSn_tapGestureRecognizer:(UITapGestureRecognizer *)sn_tapGestureRecognizer
 {
-    objc_setAssociatedObject(self, @selector(tapGestureRecognizer), tapGestureRecognizer, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, @selector(sn_tapGestureRecognizer), sn_tapGestureRecognizer, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
--(UITapGestureRecognizer *)tapGestureRecognizer
+-(UITapGestureRecognizer *)sn_tapGestureRecognizer
 {
     return objc_getAssociatedObject(self, _cmd);
 }
 
 - (void)removeGestureRecognizer
 {
-    if (self.tapGestureRecognizer)
+    if (self.sn_tapGestureRecognizer)
     {
-        [self.sn_rootView removeGestureRecognizer:self.tapGestureRecognizer];
-        self.tapGestureRecognizer = nil;
+        [self.sn_rootView removeGestureRecognizer:self.sn_tapGestureRecognizer];
+        self.sn_tapGestureRecognizer = nil;
     }
-    if (self.panGestureRecognizer)
+    if (self.sn_panGestureRecognizer)
     {
-        [self.sn_rootView removeGestureRecognizer:self.panGestureRecognizer];
-        self.panGestureRecognizer = nil;
+        [self.sn_rootView removeGestureRecognizer:self.sn_panGestureRecognizer];
+        self.sn_panGestureRecognizer = nil;
     }
 }
 
