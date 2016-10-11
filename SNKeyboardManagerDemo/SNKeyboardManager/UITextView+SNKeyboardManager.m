@@ -59,7 +59,7 @@
 -(void)sn_becomeFirstResponder
 {
     [self sn_becomeFirstResponder];
-    if ([[[UIDevice currentDevice] systemVersion]floatValue] < 9.f && self.sn_keyboardManagerEnabled)
+    if (self.sn_keyboardManagerEnabled)
     {
         if (!self.sn_tapGestureRecognizer)
         {
@@ -79,40 +79,10 @@
 -(void)sn_resignFirstResponder
 {
     [self sn_resignFirstResponder];
-    if ([[[UIDevice currentDevice] systemVersion]floatValue] < 9.f && self.sn_keyboardManagerEnabled)
+    if (self.sn_keyboardManagerEnabled)
     {
         [self removeGestureRecognizer];
     }
-}
-
-- (void)handleWillShowKeyboard:(NSNotification *)notification
-{
-    if (!self.window)
-    {
-        return;
-    }
-    if(!self.isFirstResponder)
-    {
-        [self removeGestureRecognizer];
-        return;
-    }
-    if (!self.sn_tapGestureRecognizer)
-    {
-        self.sn_tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
-        self.sn_tapGestureRecognizer.delegate = self;
-        [self.sn_rootView addGestureRecognizer:self.sn_tapGestureRecognizer];
-    }
-    if (!self.sn_panGestureRecognizer)
-    {
-        self.sn_panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pan:)];
-        self.sn_panGestureRecognizer.delegate = self;
-        [self.sn_rootView addGestureRecognizer:self.sn_panGestureRecognizer];
-    }
-}
-
-- (void)handleWillHideKeyboard:(NSNotification *)notification
-{
-    [self removeGestureRecognizer];
 }
 
 #pragma mark GestureRecognizerHandle
@@ -145,24 +115,7 @@
 -(void)setSn_keyboardManagerEnabled:(BOOL)sn_keyboardManagerEnabled
 {
     objc_setAssociatedObject(self, @selector(isKeyboardManagerEnabled), @(sn_keyboardManagerEnabled), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    if ([[[UIDevice currentDevice] systemVersion]floatValue] >= 9.f)
-    {
-        if (sn_keyboardManagerEnabled)
-        {
-            [[NSNotificationCenter defaultCenter] addObserver:self
-                                                     selector:@selector(handleWillShowKeyboard:)
-                                                         name:UIKeyboardWillShowNotification
-                                                       object:nil];
-            [[NSNotificationCenter defaultCenter] addObserver:self
-                                                     selector:@selector(handleWillHideKeyboard:)
-                                                         name:UIKeyboardWillHideNotification
-                                                       object:nil];
-        }
-        else
-        {
-            [[NSNotificationCenter defaultCenter] removeObserver:self];
-        }
-    }
+
 }
 
 -(BOOL)isKeyboardManagerEnabled
