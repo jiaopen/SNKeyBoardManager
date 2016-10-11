@@ -56,9 +56,14 @@
 
 - (void)handleWillShowKeyboard:(NSNotification *)notification
 {
+    if (!self.window)
+    {
+        return;
+    }
     if(!self.isFirstResponder)
     {
         [self removeGestureRecognizer];
+        return;
     }
     if (!self.sn_tapGestureRecognizer)
     {
